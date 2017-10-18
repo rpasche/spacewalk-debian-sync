@@ -13,14 +13,22 @@
 # Version: 20171017
 
 import sys
+import os
 from debian.deb822 import *
 
-if len(sys.argv) < 2:
+if len(sys.argv) < 3:
     print "Usage: %s <path_to_unzipped_Packages> <path_to_file_with_multiarch_headers>" % sys.argv[0]
     sys.exit(1)
 
 package_file = sys.argv[1]
 multiarch_file = sys.argv[2]
+
+if not os.path.isfile(package_file):
+    print "Error: Inputfile '%s' not available." % package_file
+    sys.exit(1)
+if not os.path.isfile(multiarch_file):
+    print "Error: Inputfile '%s' not available." % multiarch_file
+    sys.exit(1)
 
 packages = {}
 
@@ -40,6 +48,6 @@ with open(multiarch_file, 'r') as m_file:
 for pkg in packages.values():
     pkg.dump(new_package)
     new_package.write("\n")
-new_package.close()            
+new_package.close()
 sys.exit(0)
 
